@@ -40,6 +40,8 @@ export const AppLayout: React.FC = () => {
     { label: 'Data Quality Engine', path: '/data-quality', icon: ShieldCheck },
     { label: 'Audit Logs', path: '/audit', icon: FileText },
     { label: 'System Health & Logs', path: '/system/logs', icon: Activity },
+    { divider: true, section: 'Company Administration' },
+    { label: 'User Management', path: '/admin/users', icon: Users, badge: 'Admin' },
   ];
 
   const availableRoles: UserRole[] = [
@@ -193,6 +195,16 @@ export const AppLayout: React.FC = () => {
                       {user?.role === role && <Check className="w-3.5 h-3.5 text-brand-400" />}
                     </button>
                   ))}
+                  {user?.role === 'Admin' && (
+                    <NavLink
+                      to="/admin/users"
+                      onClick={() => setIsRoleDropdownOpen(false)}
+                      className="w-full text-left px-3 py-2 text-xs flex items-center gap-2 hover:bg-purple-950/60 text-purple-300 border-t border-slate-800 transition"
+                    >
+                      <Users className="w-3.5 h-3.5 text-purple-400" />
+                      <span>Manage Users (Admin)</span>
+                    </NavLink>
+                  )}
                 </div>
               )}
             </div>

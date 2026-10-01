@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [token, setToken] = useState<string | null>(localStorage.getItem('shopsphere_token'));
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Auto-login default admin user if no token exists
+  // Validate session on mount
   useEffect(() => {
     const initializeAuth = async () => {
       const savedToken = localStorage.getItem('shopsphere_token');
@@ -44,31 +44,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(res.data.user);
           setToken(savedToken);
         } catch (e) {
-          // Token invalid, login as admin
-          await loginAsDefaultAdmin();
+          localStorage.removeItem('shopsphere_token');
+          setToken(null);
+          setUser(null);
         }
       } else {
-        await loginAsDefaultAdmin();
+        setToken(null);
+        setUser(null);
       }
       setIsLoading(false);
     };
 
     initializeAuth();
   }, []);
-
-  const loginAsDefaultAdmin = async () => {
-    try {
-      const res = await api.post('/auth/login', {
-        email: 'admin@shopsphere.com',
-        password: 'password123'
-      });
-      localStorage.setItem('shopsphere_token', res.data.token);
-      setToken(res.data.token);
-      setUser(res.data.user);
-    } catch (err) {
-      console.warn('Default admin auto-login failed. Server might be booting:', err);
-    }
-  };
 
   const login = async (email: string, password: string = 'password123') => {
     const res = await api.post('/auth/login', { email, password });

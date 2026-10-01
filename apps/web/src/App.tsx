@@ -1,6 +1,7 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
+import { useAuth } from './context/AuthContext';
 
 // Page imports
 import { Dashboard } from './pages/Dashboard';
@@ -24,6 +25,30 @@ import { AuditLogs } from './pages/AuditLogs';
 import { SystemLogs } from './pages/SystemLogs';
 import { DemoScenarios } from './pages/DemoScenarios';
 import { Login } from './pages/Login';
+import { AdminUsers } from './pages/AdminUsers';
+
+// Route guard requiring authenticated user
+const ProtectedLayout: React.FC = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="h-screen w-screen bg-slate-950 flex flex-col items-center justify-center text-slate-400">
+        <div className="w-10 h-10 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin mb-3" />
+        <p className="text-xs font-mono tracking-widest uppercase text-indigo-400">
+          Authenticating Operator Session...
+        </p>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <AppLayout />;
+};
 
 export const App: React.FC = () => {
   return (
@@ -31,8 +56,8 @@ export const App: React.FC = () => {
       {/* Public Login Route */}
       <Route path="/login" element={<Login />} />
 
-      {/* Main Command Center Shell Layout */}
-      <Route element={<AppLayout />}>
+      {/* Protected Command Center Shell Layout */}
+      <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/ai" element={<AICommandCenter />} />
         <Route path="/scenarios" element={<DemoScenarios />} />
@@ -60,6 +85,9 @@ export const App: React.FC = () => {
         <Route path="/system/data-quality" element={<DataQuality />} />
         <Route path="/audit" element={<AuditLogs />} />
         <Route path="/system/logs" element={<SystemLogs />} />
+
+        {/* Company Admin IAM & User Management */}
+        <Route path="/admin/users" element={<AdminUsers />} />
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

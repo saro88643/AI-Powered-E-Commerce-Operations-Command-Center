@@ -66,6 +66,47 @@ async function runTestSuite() {
     } catch (err) {
       assert(err.response?.status === 403, 'RBAC successfully rejected Viewer write attempt with HTTP 403 Forbidden');
     }
+
+    // Admin User Provisioning & Password Management test
+    const userEmail = `operator.${Date.now()}@gmail.com`;
+    const newUserRes = await axios.post(
+      `${BACKEND_URL}/api/auth/users`,
+      { email: userEmail, password: 'initialPass123', fullName: 'Test Operator', role: 'Operations Manager' },
+      { headers: { Authorization: `Bearer ${adminToken}` } }
+    );
+    assert(newUserRes.status === 201 && newUserRes.data.user.email === userEmail, 'Company Admin provisioned new operator user account with Gmail ID');
+
+    // Admin Password Reset test
+    const resetRes = await axios.put(
+      `${BACKEND_URL}/api/auth/users/${newUserRes.data.user.id}/password`,
+      { newPassword: 'updatedPass456' },
+      { headers: { Authorization: `Bearer ${adminToken}` } }
+    );
+    assert(resetRes.status === 200, 'Company Admin successfully reset operator password');
+
+    // Verify login with new password
+    const newLoginRes = await axios.post(`${BACKEND_URL}/api/auth/login`, {
+      email: userEmail,
+      password: 'updatedPass456'
+    });
+    assert(newLoginRes.data.user.role === 'Operations Manager', 'Operator logged in with updated password and received Operations Manager role');
+
+    // Verify Viewer cannot provision users
+    try {
+      await axios.post(
+        `${BACKEND_URL}/api/auth/users`,
+        { email: 'unauthorized@gmail.com', password: 'test123', fullName: 'Hacker', role: 'Admin' },
+        { headers: { Authorization: `Bearer ${viewerToken}` } }
+      );
+      assert(false, 'Viewer was erroneously allowed to provision a user');
+    } catch (err) {
+      assert(err.response?.status === 403, 'RBAC rejected non-admin user provisioning attempt with HTTP 403 Forbidden');
+    }
+
+    // Clean up test user
+    await axios.delete(`${BACKEND_URL}/api/auth/users/${newUserRes.data.user.id}`, {
+      headers: { Authorization: `Bearer ${adminToken}` }
+    });
   } catch (err) {
     console.error('Suite 1 setup error:', err.message);
   }

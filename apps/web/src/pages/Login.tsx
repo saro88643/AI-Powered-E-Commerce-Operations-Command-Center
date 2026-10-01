@@ -1,30 +1,38 @@
-import React, { useState } from 'react';
-import { useAuth, UserRole } from '../context/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
   ShieldCheck,
   Lock,
   Mail,
   ArrowRight,
-  Sparkles,
-  Layers,
-  Database,
-  Terminal,
   Cpu,
-  UserCheck
+  UserCheck,
+  Eye,
+  EyeOff,
+  Shield,
+  KeyRound
 } from 'lucide-react';
 
 export const Login: React.FC = () => {
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [email, setEmail] = useState('admin@shopsphere.com');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const from = (location.state as any)?.from?.pathname || '/';
+
+  // If already authenticated, redirect immediately
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate(from, { replace: true });
+    }
+  }, [isAuthenticated, navigate, from]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,14 +88,25 @@ export const Login: React.FC = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-xl relative z-10 px-4 sm:px-0">
         <div className="bg-slate-900/90 border border-slate-800 rounded-2xl py-8 px-6 sm:px-10 shadow-2xl backdrop-blur-xl">
+          {/* Company Policy Notice */}
+          <div className="mb-6 p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 flex items-start gap-3">
+            <Shield className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+            <div className="text-[11px] text-slate-400 leading-relaxed">
+              <span className="text-white font-semibold">Company Admin Governance:</span> Public self-registration is disabled. All operator accounts, Gmail IDs, assigned roles, and password credentials are provisioned exclusively by the <span className="text-purple-300 font-semibold">Company Admin</span> via the internal Administration page.
+            </div>
+          </div>
+
           <form className="space-y-4" onSubmit={handleLogin}>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Operator Email</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1">
+                Email Address or Gmail ID
+              </label>
               <div className="relative">
                 <Mail className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
                 <input
                   type="email"
                   required
+                  placeholder="admin@shopsphere.com or your.name@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono transition"
@@ -96,16 +115,26 @@ export const Login: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Password</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1">
+                Password
+              </label>
               <div className="relative">
                 <Lock className="w-4 h-4 absolute left-3 top-2.5 text-slate-500" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   required
+                  placeholder="Enter your assigned password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-3.5 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono transition"
+                  className="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-9 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono transition"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-2.5 text-slate-500 hover:text-slate-300 transition"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
 
@@ -129,7 +158,7 @@ export const Login: React.FC = () => {
           <div className="mt-8 pt-6 border-t border-slate-800">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-                <UserCheck className="w-3.5 h-3.5 text-indigo-400" /> Quick Role Presets (1-Click Login)
+                <UserCheck className="w-3.5 h-3.5 text-indigo-400" /> Demo Role Presets (1-Click Login)
               </span>
               <span className="text-[10px] text-slate-500 font-mono">Password: password123</span>
             </div>
@@ -138,10 +167,12 @@ export const Login: React.FC = () => {
               <button
                 type="button"
                 onClick={() => quickLogin('admin@shopsphere.com', 'Admin')}
-                className="p-2.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-left transition group"
+                className="p-2.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-purple-800/60 text-left transition group"
               >
-                <div className="text-xs font-bold text-white group-hover:text-indigo-300">Admin</div>
-                <div className="text-[10px] text-slate-400">Full System & FDE</div>
+                <div className="text-xs font-bold text-purple-300 group-hover:text-purple-200 flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5" /> Company Admin
+                </div>
+                <div className="text-[10px] text-slate-400">Full System & Users</div>
               </button>
 
               <button
@@ -195,3 +226,4 @@ export const Login: React.FC = () => {
     </div>
   );
 };
+export default Login;
