@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+venv/
+env/
+.venv/
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Databases & runtime state
+data/pgdata/
+*.log
+.DS_Store
+Thumbs.db

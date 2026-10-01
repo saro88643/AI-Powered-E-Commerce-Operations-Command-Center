@@ -1,0 +1,44 @@
+[
+  {
+    "id": "inc-001",
+    "incident_number": "INC-2026-081",
+    "title": "Warehouse W03 Inventory Synchronization Failure & Discrepancy",
+    "severity": "high",
+    "service": "inventory-api",
+    "description": "Network partition and stale inventory cache in W03 edge gateway caused out-of-sync available stock counts. Systems accepted orders for Product P-204 despite zero physical inventory, impacting 143 orders in Coimbatore region.",
+    "affected_records_count": 143,
+    "status": "Open",
+    "root_cause": "Inventory synchronization failure at Warehouse W03 edge gateway caused out-of-sync inventory values and fulfillment failure for P-204.",
+    "resolution": "Requires inventory restock / cross-warehouse transfer from W02 to W03 and cache invalidation.",
+    "created_at": "2026-09-29T15:48:10.948252",
+    "updated_at": "2026-09-30T21:48:10.948290"
+  },
+  {
+    "id": "inc-002",
+    "incident_number": "INC-2026-079",
+    "title": "SpeedFast Logistics South-Zone Hub Routing Congestion",
+    "severity": "medium",
+    "service": "delivery-api",
+    "description": "Heavy vehicle route breakdown near Salem bypass resulting in +36h transit delays for consignments routed south.",
+    "affected_records_count": 54,
+    "status": "Investigating",
+    "root_cause": "Highway vehicle breakdown causing hub queue backlog.",
+    "resolution": "Re-routed critical parcels via BlueDart secondary network.",
+    "created_at": "2026-09-28T21:48:10.948298",
+    "updated_at": "2026-09-30T21:48:10.948303"
+  },
+  {
+    "id": "inc-003",
+    "incident_number": "INC-2026-074",
+    "title": "UPI Payment Gateway Bank Webhook Timeout Surge",
+    "severity": "low",
+    "service": "payment-api",
+    "description": "Intermittent 504 timeouts on bank clearing house webhooks between 14:00 - 15:30 yesterday.",
+    "affected_records_count": 28,
+    "status": "Resolved",
+    "root_cause": "NPCI UPI switch momentary latency peak.",
+    "resolution": "Re-polled pending transactions; all 28 settled or reversed automatically.",
+    "created_at": "2026-09-28T21:48:10.948306",
+    "updated_at": "2026-09-29T21:48:10.948314"
+  }
+]

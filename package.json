@@ -1,0 +1,29 @@
+{
+  "name": "shopsphere-operations-command-center",
+  "version": "1.0.0",
+  "description": "ShopSphere — AI-Powered E-Commerce Operations Command Center",
+  "author": "Forward Deployed Engineering Team",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node scripts/run_all.js",
+    "dev:backend": "npm --prefix apps/backend run dev",
+    "dev:web": "npm --prefix apps/web run dev",
+    "dev:ai": "python apps/ai-service/app/main.py",
+    "dev:services": "node services/run_services.js",
+    "generate-data": "python scripts/generate_synthetic_data.py",
+    "seed": "node scripts/seed_all.js",
+    "migrate": "node apps/backend/src/db/migrate.js",
+    "test": "node scripts/run_tests.js"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.14",
+    "axios": "^1.20.0",
+    "cors": "^2.8.6",
+    "dotenv": "^16.4.7",
+    "express": "^5.2.1",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
+  }
+}

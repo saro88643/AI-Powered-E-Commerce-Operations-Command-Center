@@ -1,0 +1,30 @@
+[
+  {
+    "id": "aud-001",
+    "user_email": "system@shopsphere.com",
+    "action": "SYSTEM_INCIDENT_FLAGGED",
+    "entity": "INCIDENT",
+    "entity_id": "INC-2026-081",
+    "reason": "Automated inventory mismatch monitor flagged 50 unit discrepancy on P-204 at W03",
+    "details": {
+      "warehouse": "W03",
+      "product": "P-204",
+      "delta": -50
+    },
+    "status": "SUCCESS",
+    "timestamp": "2026-09-29T16:48:10.949505"
+  },
+  {
+    "id": "aud-002",
+    "user_email": "admin@shopsphere.com",
+    "action": "USER_ROLE_ASSIGNED",
+    "entity": "USER",
+    "entity_id": "USR-002",
+    "reason": "Assigned Operations Manager role to ops.lead@shopsphere.com",
+    "details": {
+      "assigned_role": "Operations Manager"
+    },
+    "status": "SUCCESS",
+    "timestamp": "2026-09-20T21:48:10.949534"
+  }
+]

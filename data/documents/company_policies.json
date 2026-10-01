@@ -1,0 +1,74 @@
+[
+  {
+    "document_id": "DOC-REFUND-01",
+    "document_name": "Refund Policy.pdf",
+    "section": "1. General Refund Eligibility & Timelines",
+    "page": 1,
+    "chunk_id": "REFUND-C01",
+    "content": "ShopSphere Customer Refund Policy (Standard Guidelines). Orders may be refunded within 30 days of the recorded delivery date, provided the customer requests cancellation, return, or compensation under authorized conditions. Approved refunds are credited back to the original payment source within 3 to 5 business days for online payments (UPI, credit/debit cards) or via NEFT for cash-on-delivery orders upon bank detail verification."
+  },
+  {
+    "document_id": "DOC-REFUND-01",
+    "document_name": "Refund Policy.pdf",
+    "section": "2. Damaged & Defective Product Replacement / Refund",
+    "page": 2,
+    "chunk_id": "REFUND-C02",
+    "content": "If a product is received in a damaged condition, defective state, or with missing components, the customer is entitled to an immediate replacement or full 100% refund with waived return pickup fees. The issue must be reported within 7 calendar days of receipt along with photographic evidence uploaded through the support portal or customer care executive."
+  },
+  {
+    "document_id": "DOC-REFUND-01",
+    "document_name": "Refund Policy.pdf",
+    "section": "3. Late Delivery Compensation & Automatic Goodwill Refunds",
+    "page": 3,
+    "chunk_id": "REFUND-C03",
+    "content": "Late Delivery Compensation Protocol: When an order is delayed by more than 72 hours beyond the guaranteed Expected Delivery Date due to operational bottlenecks, warehouse synchronization failures, or logistics disruptions, the customer is eligible for a 15% shipping delay concession or goodwill credit up to INR 500. If the delay exceeds 7 business days and the order is still unfulfilled, the customer may cancel the order for an immediate full refund."
+  },
+  {
+    "document_id": "DOC-REFUND-01",
+    "document_name": "Refund Policy.pdf",
+    "section": "4. Non-Refundable and Final Sale Categories",
+    "page": 4,
+    "chunk_id": "REFUND-C04",
+    "content": "The following categories are non-returnable and non-refundable unless received in a damaged or DOA (dead on arrival) condition: Personal hygiene products, customized apparel, perishable groceries, digital software keys, and hazardous items marked 'Final Sale'. Fitness bands and electronic wearables (such as AeroPulse P-204) are fully eligible for return or refund within 14 days if found defective."
+  },
+  {
+    "document_id": "DOC-WH-SOP-01",
+    "document_name": "Warehouse SOP.pdf",
+    "section": "3.2 Inventory Synchronization Error Remediation",
+    "page": 7,
+    "chunk_id": "WHSOP-C01",
+    "content": "Warehouse Standard Operating Procedure: Edge Synchronization Failures. If a regional hub or fulfillment warehouse (such as W03 Coimbatore) experiences edge network disconnection or database sync timeouts, the local inventory ERP state may diverge from the central omnichannel catalog. When a discrepancy between physical stock and ERP stock exceeds 10 units, warehouse managers must immediately freeze pending allocations, initiate a physical cycle count, and request an emergency cross-warehouse transfer from the nearest regional mother hub."
+  },
+  {
+    "document_id": "DOC-WH-SOP-01",
+    "document_name": "Warehouse SOP.pdf",
+    "section": "4.1 Cross-Warehouse Inventory Transfer Protocol",
+    "page": 9,
+    "chunk_id": "WHSOP-C02",
+    "content": "Cross-Warehouse Stock Transfer Procedure: When fulfillment at a local facility is blocked due to stock-out or damaged batches, stock may be reallocated from a neighboring distribution center having surplus availability (> 100 units above safety threshold). For South Zone facilities (e.g. Coimbatore W03), the primary supply hub is Bengaluru Central Logistics Hub (W02). Transfers of up to 100 units may be auto-approved by Operations Managers and dispatched via priority freight within 24 hours."
+  },
+  {
+    "document_id": "DOC-SUPPORT-SOP-01",
+    "document_name": "Customer Support SOP.pdf",
+    "section": "2.4 Repeat Contact SLA and Escalations",
+    "page": 5,
+    "chunk_id": "CS-SOP-C01",
+    "content": "Customer Support Escalation Guidelines: Any customer who opens 3 or more tickets or contacts support more than twice within 7 days regarding an unfulfilled or delayed order must be flagged as a 'Priority Escalation'. Tier-2 support leads must proactively contact the customer via telephone or priority WhatsApp, review order status, link related warehouse incidents, and offer resolution including expedited reshipment or compensation voucher."
+  },
+  {
+    "document_id": "DOC-DELIVERY-01",
+    "document_name": "Delivery Escalation Policy.pdf",
+    "section": "1.3 Courier Partner Failure Escalation & Rerouting",
+    "page": 3,
+    "chunk_id": "DELIV-C01",
+    "content": "Delivery Logistics Escalation: Courier partners with an on-time delivery rate below 85% in any specific regional corridor over a rolling 7-day period are placed on probation. In the event of transit route disruption (such as highway blockages or vehicle breakdowns), shipments delayed by more than 48 hours must be re-dispatched via alternate tier-1 carriers (BlueDart or Delhivery Express) at the expense of the defaulting partner."
+  },
+  {
+    "document_id": "DOC-SUPPLIER-01",
+    "document_name": "Supplier Agreement.pdf",
+    "section": "5. Defect Rates and Quality Penalities",
+    "page": 12,
+    "chunk_id": "SUPP-C01",
+    "content": "Supplier Quality Assurance & Return Penalties: Suppliers whose products exhibit a return rate exceeding 15% due to manufacturing defects, sizing errors, or component failures over a 30-day window are subject to automatic batch audits. The supplier shall bear all reverse logistics charges and reimburse ShopSphere for replacement units."
+  }
+]
