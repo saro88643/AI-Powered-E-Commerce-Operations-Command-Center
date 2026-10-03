@@ -27,6 +27,10 @@ const dashboardRoutes = require('./routes/dashboard.routes');
 const searchRoutes = require('./routes/search.routes');
 const systemRoutes = require('./routes/system.routes');
 const aiRoutes = require('./routes/ai.routes');
+const departmentsRoutes = require('./routes/departments.routes');
+const complaintsRoutes = require('./routes/complaints.routes');
+const companyRoutes = require('./routes/company.routes');
+const notificationsRoutes = require('./routes/notifications.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -62,6 +66,10 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/system', systemRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/departments', departmentsRoutes);
+app.use('/api/complaints', complaintsRoutes);
+app.use('/api/company', companyRoutes);
+app.use('/api/notifications', notificationsRoutes);
 
 // OpenAPI / Swagger Documentation specification (Requirement 45)
 app.get('/api/docs', (req, res) => {

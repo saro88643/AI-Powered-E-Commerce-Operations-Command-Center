@@ -26,6 +26,24 @@ import { SystemLogs } from './pages/SystemLogs';
 import { DemoScenarios } from './pages/DemoScenarios';
 import { Login } from './pages/Login';
 import { AdminUsers } from './pages/AdminUsers';
+import { OrgHierarchy } from './pages/OrgHierarchy';
+import { Complaints } from './pages/Complaints';
+import { ClientPortal } from './pages/ClientPortal';
+import { EmployeeGrievances } from './pages/EmployeeGrievances';
+
+// Customer Storefront Page Imports
+import { StoreLayout } from './pages/store/StoreLayout';
+import { StoreHome } from './pages/store/StoreHome';
+import { StoreProducts } from './pages/store/StoreProducts';
+import { StoreProductDetail } from './pages/store/StoreProductDetail';
+import { StoreCart } from './pages/store/StoreCart';
+import { StoreCheckout } from './pages/store/StoreCheckout';
+import { StoreOrders } from './pages/store/StoreOrders';
+import { StoreOrderDetail } from './pages/store/StoreOrderDetail';
+import { StoreReturns } from './pages/store/StoreReturns';
+import { StoreComplaints } from './pages/store/StoreComplaints';
+import { StoreNotifications } from './pages/store/StoreNotifications';
+import { StoreProfile } from './pages/store/StoreProfile';
 
 // Route guard requiring authenticated user
 const ProtectedLayout: React.FC = () => {
@@ -56,12 +74,40 @@ export const App: React.FC = () => {
       {/* Public Login Route */}
       <Route path="/login" element={<Login />} />
 
+      {/* Customer Storefront Application Routes (Connected to ShopSphere Business Systems) */}
+      <Route path="/store" element={<StoreLayout />}>
+        <Route index element={<StoreHome />} />
+        <Route path="products" element={<StoreProducts />} />
+        <Route path="product/:id" element={<StoreProductDetail />} />
+        <Route path="search" element={<StoreProducts />} />
+        <Route path="cart" element={<StoreCart />} />
+        <Route path="checkout" element={<StoreCheckout />} />
+        <Route path="orders" element={<StoreOrders />} />
+        <Route path="orders/:id" element={<StoreOrderDetail />} />
+        <Route path="returns" element={<StoreReturns />} />
+        <Route path="complaints" element={<StoreComplaints />} />
+        <Route path="notifications" element={<StoreNotifications />} />
+        <Route path="profile" element={<StoreProfile />} />
+      </Route>
+
       {/* Protected Command Center Shell Layout */}
       <Route element={<ProtectedLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/ai" element={<AICommandCenter />} />
         <Route path="/scenarios" element={<DemoScenarios />} />
         
+        {/* Real-World Client Portal */}
+        <Route path="/client" element={<ClientPortal />} />
+
+        {/* Complaints Desk & Real-Time Alerts */}
+        <Route path="/complaints" element={<Complaints />} />
+
+        {/* Department Hierarchy & Structure (Senior & Manager View) */}
+        <Route path="/organization" element={<OrgHierarchy />} />
+
+        {/* Confidential Employee Grievances Desk */}
+        <Route path="/my-grievances" element={<EmployeeGrievances />} />
+
         {/* Orders & Fulfillment */}
         <Route path="/orders" element={<Orders />} />
         <Route path="/orders/:id" element={<OrderDetail />} />

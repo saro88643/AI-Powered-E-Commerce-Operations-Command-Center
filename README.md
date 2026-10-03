@@ -152,14 +152,46 @@ Access the services:
 
 ---
 
-## 🔐 Credentials & Roles
+## 🔐 Credentials & Roles Hierarchy
 
-| Email | Password | Role | Access Level |
+| Email | Password | Role | Access Scope & Responsibility |
 |---|---|---|---|
-| `admin@shopsphere.com` | `password123` | **Admin** | Full read/write access, AI action confirmation, chaos simulator |
-| `ops@shopsphere.com` | `password123` | **Operations Manager** | Full operational visibility, stock transfer execution |
-| `warehouse@shopsphere.com` | `password123` | **Warehouse Manager** | Inventory reallocation, order status management |
-| `viewer@shopsphere.com` | `password123` | **Viewer** | Read-only access across all dashboards (write actions rejected with HTTP 403) |
+| `admin@shopsphere.com` | `password123` | **Admin** | Full system control, department creation, user hierarchy assignment |
+| `devon.executive@shopsphere.com` | `password123` | **Overall Manager** | Executive operational oversight across all departments & org chart |
+| `manager.delivery@shopsphere.com` | `password123` | **Department Manager** | Delivery & Logistics lead, supervises Team Leads and complaint escalations |
+| `manager.product@shopsphere.com` | `password123` | **Department Manager** | Product & Catalog lead, handles product defect complaints |
+| `hr.lead@shopsphere.com` | `password123` | **HR** | Corporate HR lead, workplace ethics & employee grievance oversight |
+| `tl.express@shopsphere.com` | `password123` | **Team Lead** | Express Fleet lead, first responder to delivery alerts & team complaints |
+| `emp.deliv1@shopsphere.com` | `password123` | **Employee** | Senior Dispatcher; grievances scoped strictly to TL & Manager |
+| `client.reliance@enterprise.in` | `password123` | **Client (Reliance Retail)** | Commercial partner (ID: `CLI-8801`), tracks orders, lodges client complaints |
+| `client.titan@enterprise.in` | `password123` | **Client (Titan Luxury)** | Commercial partner (ID: `CLI-8802`), tracks batches, files return tickets |
+| `client.zomato@hyperlocal.in` | `password123` | **Client (Zomato)** | Quick commerce client (ID: `CLI-8803`), live tracking & delivery complaints |
+| `ops@shopsphere.com` | `password123` | **Operations Manager** | Cross-warehouse transfers, inventory reallocations |
+| `warehouse@shopsphere.com` | `password123` | **Warehouse Manager** | Warehouse intake, stock adjustments, cycle counts |
+| `viewer@shopsphere.com` | `password123` | **Viewer** | Read-only compliance auditor |
+
+---
+
+## 🏢 Real-World Enterprise Operations Architecture
+
+### 1. Multi-Stage Department & Organizational Hierarchy (`/organization`)
+- **Structure**: Company Leadership (`Overall Manager`) → Functional Departments (`Product`, `Delivery`, `Support`, `Warehousing`, `Finance`, `HR`) → `Department Managers` → `HR & Team Leads` → `Employees / Operators`.
+- **Interactive Org Chart**: Senior executives and managers can view the full hierarchy with live badges for active alerts, resolved tickets, headcount, and target SLAs.
+- **Admin Tooling**: Admin can create new departments and provision employees with direct reporting manager and team lead assignments.
+
+### 2. Immediate Officer Detection & Alerting Engine (`/complaints`)
+- **Real-Time Alert Dispatch**: When a complaint is filed, the system auto-detects the affected department, designates the responsible Officer / Team Lead, and triggers an immediate high-priority alert.
+- **Officer Console Alert**: Displays an urgent alert banner with synthesized audio notification chime, immediate assignment, and 1-click investigation drawer.
+- **Manager & Senior Analytics**: Recharts visual dashboard with Department load comparisons, SLA compliance gauges, and Status pipeline donuts.
+
+### 3. Strict Scoped Privacy Gate for Employee Grievances (`/my-grievances`)
+- **Scoped Visibility**: When an internal employee files a workplace, shift, or equipment grievance, the backend enforces strict scoping so it is visible **ONLY to their designated Team Lead and Department Manager**. Peer workers and outside team leads cannot access it.
+
+### 4. Real-World Commercial Client Portal (`/client`)
+- **Company Credentials & Direct Contacts**: Detailed corporate footprint (20 fulfillment hubs, 450+ EV fleet, 99.2% on-time SLA guarantee, GSTIN, 24/7 hotline).
+- **Live Order Telemetry & Milestone Pipeline**: 6-stage visual pipeline (`Order Confirmed` → `Routed to Hub` → `Packed & Dispatched` → `In Transit Telemetry` → `Out for Delivery` → `Delivered`) with assigned courier vehicle and driver badge.
+- **1-Click Issue Filing**: Clients can lodge complaints directly for any consignment and watch real-time resolution updates.
+- **Self-Registration**: New clients can self-register their commercial account and immediately start tracking orders.
 
 ---
 

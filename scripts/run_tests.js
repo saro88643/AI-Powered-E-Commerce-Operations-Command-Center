@@ -10,6 +10,9 @@ const { getDb } = require('../apps/backend/src/db/mongo');
 const GenericRESTConnector = require('../apps/backend/src/connectors/GenericRESTConnector');
 const canonicalTransformer = require('../apps/backend/src/canonical/canonicalTransformer');
 
+const { spawn } = require('child_process');
+const path = require('path');
+
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3000';
 const AI_SERVICE_URL = process.env.AI_SERVICE_URL || 'http://localhost:5000';
 const INVENTORY_API_URL = process.env.INVENTORY_API_URL || 'http://localhost:4001';
@@ -17,6 +20,7 @@ const DELIVERY_API_URL = process.env.DELIVERY_API_URL || 'http://localhost:4002'
 
 let passedTests = 0;
 let failedTests = 0;
+const spawnedProcesses = [];
 
 function assert(condition, message) {
   if (condition) {
@@ -28,10 +32,81 @@ function assert(condition, message) {
   }
 }
 
+async function isPortHealthy(url) {
+  try {
+    const res = await axios.get(url, { timeout: 1000 });
+    return res.status >= 200 && res.status < 500;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function ensureServicesRunning() {
+  const rootDir = path.resolve(__dirname, '..');
+  
+  const backendHealthy = await isPortHealthy(`${BACKEND_URL}/health`);
+  const inventoryHealthy = await isPortHealthy(`${INVENTORY_API_URL}/health`);
+  const aiHealthy = await isPortHealthy(`${AI_SERVICE_URL}/health`);
+
+  if (backendHealthy && inventoryHealthy && aiHealthy) {
+    return;
+  }
+
+  console.log('⚡ Auto-starting ShopSphere microservices for E2E test execution...');
+
+  if (!inventoryHealthy) {
+    const p = spawn('node', ['services/run_services.js'], { cwd: rootDir, stdio: 'ignore' });
+    spawnedProcesses.push(p);
+  }
+
+  if (!aiHealthy) {
+    const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
+    const p = spawn(pythonCmd, ['apps/ai-service/run.py'], { cwd: rootDir, stdio: 'ignore' });
+    spawnedProcesses.push(p);
+  }
+
+  if (!backendHealthy) {
+    const p = spawn('node', ['apps/backend/src/server.js'], { cwd: rootDir, stdio: 'ignore' });
+    spawnedProcesses.push(p);
+  }
+
+  // Poll until all services are healthy (max 15 seconds)
+  const startTime = Date.now();
+  while (Date.now() - startTime < 15000) {
+    const bOK = await isPortHealthy(`${BACKEND_URL}/health`);
+    const iOK = await isPortHealthy(`${INVENTORY_API_URL}/health`);
+    const aOK = await isPortHealthy(`${AI_SERVICE_URL}/health`);
+    if (bOK && iOK && aOK) {
+      console.log('  ✓ All ShopSphere microservices and backend API online.\n');
+      return;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 500));
+  }
+
+  console.log('  ⚠ Warning: Some services took longer to respond. Proceeding with tests...\n');
+}
+
+function cleanupSpawnedServices() {
+  if (spawnedProcesses.length > 0) {
+    console.log('🧹 Cleaning up auto-started test services...');
+    spawnedProcesses.forEach((p) => {
+      try {
+        if (process.platform === 'win32' && p.pid) {
+          spawn('taskkill', ['/pid', p.pid.toString(), '/f', '/t'], { stdio: 'ignore' });
+        } else {
+          p.kill('SIGTERM');
+        }
+      } catch (e) {}
+    });
+  }
+}
+
 async function runTestSuite() {
   console.log('\n================================================================');
   console.log('   ShopSphere Operations Command Center — End-to-End Test Suite  ');
   console.log('================================================================\n');
+
+  await ensureServicesRunning();
 
   let adminToken = '';
   let viewerToken = '';
@@ -254,7 +329,7 @@ async function runTestSuite() {
     const foundAudit = auditRes.data.data.find((a) => a.entity_id === resolution.transferId || a.action.includes('REMEDIATION') || a.action.includes('TRANSFER'));
     assert(foundAudit !== undefined, `Verified immutable audit log entry for ${resolution.transferId}`);
   } catch (err) {
-    console.error('Suite 6 error:', err.message);
+    console.error('Suite 6 error:', err.response?.data || err.stack || err.message);
   }
 
   // -------------------------------------------------------------
@@ -283,11 +358,85 @@ async function runTestSuite() {
   }
 
   // -------------------------------------------------------------
+  // TEST SUITE 8: Customer E-Commerce Storefront Integration
+  // -------------------------------------------------------------
+  console.log('\n\x1b[36m[SUITE 8]\x1b[0m Customer Storefront, Checkout, Payment Simulation & RAG Returns');
+  try {
+    // 1. Browse products
+    const catRes = await axios.get(`${BACKEND_URL}/api/products/categories`);
+    assert(catRes.data.categories && catRes.data.categories.length >= 5, 'Customer can browse product categories');
+
+    const prodDetailRes = await axios.get(`${BACKEND_URL}/api/products/P-204`);
+    assert(prodDetailRes.data.product_id === 'P-204' && prodDetailRes.data.inventory, 'Customer product detail includes live regional warehouse stock');
+
+    // 2. Simulated Payment Failure Flow (Requirement 10)
+    try {
+      await axios.post(`${BACKEND_URL}/api/orders`, {
+        items: [{ product_id: 'P-204', quantity: 1, price: 3499.0 }],
+        customerName: 'Aarav Sharma',
+        shippingAddress: '124 Gandhipuram',
+        shippingCity: 'Coimbatore',
+        paymentMethod: 'UPI',
+        simulatePaymentFailure: true
+      });
+      assert(false, 'Checkout erroneously accepted failed payment');
+    } catch (err) {
+      assert(err.response?.status === 402 && err.response?.data?.paymentStatus === 'FAILED', 'Payment simulation failure correctly rejected with HTTP 402 Payment Required');
+    }
+
+    // 3. Successful Order Placement & Inventory Reservation (Requirement 8 & 11)
+    const checkoutRes = await axios.post(`${BACKEND_URL}/api/orders`, {
+      items: [{ product_id: 'P-204', quantity: 1, price: 3499.0 }],
+      customerName: 'Aarav Sharma',
+      shippingAddress: '124 Gandhipuram',
+      shippingCity: 'Coimbatore',
+      paymentMethod: 'UPI',
+      simulatePaymentFailure: false,
+      channel: 'WEBSITE'
+    });
+    assert(checkoutRes.status === 201 && checkoutRes.data.order?.order_number, `Successful order created: ${checkoutRes.data.order?.order_number} allocated to ${checkoutRes.data.order?.warehouse?.name || 'W03'}`);
+
+    const newOrderNum = checkoutRes.data.order?.order_number;
+
+    // 4. Live Order Tracking Milestone Timeline (Requirement 14)
+    const trackRes = await axios.get(`${BACKEND_URL}/api/orders/track/${newOrderNum}`);
+    assert(trackRes.data.milestones && trackRes.data.milestones.length >= 5, `Live consignment tracking retrieved ${trackRes.data.milestones.length} milestone events`);
+
+    // 5. RAG Return Policy Evaluation (Requirement 21)
+    const policyEvalRes = await axios.post(`${BACKEND_URL}/api/returns/evaluate-policy`, {
+      orderNumber: newOrderNum,
+      productId: 'P-204',
+      reason: 'Defective',
+      category: 'Electronics'
+    });
+    assert(policyEvalRes.data.eligible === true && policyEvalRes.data.policySource?.documentName === 'Return Policy.pdf', `RAG policy check cited document "${policyEvalRes.data.policySource?.documentName}" (Chunk: ${policyEvalRes.data.policySource?.chunkId})`);
+
+    // 6. Customer Complaint Registration (Requirement 18 & 19)
+    const complaintRes = await axios.post(`${BACKEND_URL}/api/complaints`, {
+      type: 'CLIENT_COMPLAINT',
+      title: `Delivery delay query for ${newOrderNum}`,
+      description: 'Order tracking states pending allocation at W03 hub.',
+      category: 'delivery_delay',
+      severity: 'HIGH',
+      orderNumber: newOrderNum
+    }, { headers: { Authorization: `Bearer ${adminToken}` } });
+    assert(complaintRes.status === 201 && complaintRes.data.complaint?.ticketNumber, `Registered customer complaint ticket: ${complaintRes.data.complaint?.ticketNumber} and dispatched officer alert`);
+
+    // 7. Customer Notifications Inbox (Requirement 23)
+    const notifRes = await axios.get(`${BACKEND_URL}/api/notifications?customerId=CUST-0001`);
+    assert(notifRes.data.notifications && notifRes.data.notifications.length > 0, `Customer inbox received ${notifRes.data.notifications.length} real-time notifications`);
+  } catch (err) {
+    console.error('Suite 8 error:', err.response?.data || err.stack || err.message);
+  }
+
+  // -------------------------------------------------------------
   // SUMMARY
   // -------------------------------------------------------------
   console.log('\n================================================================');
   console.log(`   TEST SUITE SUMMARY: \x1b[32m${passedTests} PASSED\x1b[0m, \x1b[${failedTests > 0 ? '31' : '32'}m${failedTests} FAILED\x1b[0m`);
   console.log('================================================================\n');
+
+  cleanupSpawnedServices();
 
   if (failedTests > 0) {
     process.exit(1);
@@ -298,6 +447,7 @@ async function runTestSuite() {
 if (require.main === module) {
   runTestSuite().catch((err) => {
     console.error('Fatal test runner error:', err);
+    cleanupSpawnedServices();
     process.exit(1);
   });
 }

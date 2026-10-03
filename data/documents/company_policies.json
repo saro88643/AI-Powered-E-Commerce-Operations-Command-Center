@@ -1,5 +1,37 @@
 [
   {
+    "document_id": "DOC-RETURN-01",
+    "document_name": "Return Policy.pdf",
+    "section": "1. Standard Return Windows & Eligibility",
+    "page": 1,
+    "chunk_id": "RETURN-C01",
+    "content": "ShopSphere Omnichannel Return Policy: Customers may return eligible products within 10 to 14 days of successful delivery. Electronics, computer peripherals (including Wireless Keyboard P-204 and mice), smart devices, and accessories carry a strict 10-day return window from the date of physical receipt. Items must be in original condition with intact packaging, tags, warranty card, and accessories. Return pickups are 100% free of charge and scheduled at the customer's shipping address within 48 hours of approval."
+  },
+  {
+    "document_id": "DOC-RETURN-01",
+    "document_name": "Return Policy.pdf",
+    "section": "2. Defective, Damaged, or Incompatible Products",
+    "page": 2,
+    "chunk_id": "RETURN-C02",
+    "content": "Damaged on Arrival (DOA) or Defective Goods: If a product arrives damaged, incomplete, or experiences hardware failure within the warranty return window, the customer is entitled to an immediate replacement or full refund. The return request must specify the defect type (Damaged, Defective, Wrong Product, Missing Item) and will be automatically pre-approved if submitted within 7 days of delivery."
+  },
+  {
+    "document_id": "DOC-SHIPPING-01",
+    "document_name": "Shipping Policy.pdf",
+    "section": "1. Standard and Express Shipping SLAs",
+    "page": 1,
+    "chunk_id": "SHIP-C01",
+    "content": "ShopSphere National Shipping SLAs: Standard Delivery orders are fulfilled within 3 to 5 business days across Tier-1 and Tier-2 Indian cities (Delhi, Mumbai, Bengaluru, Hyderabad, Chennai, Kolkata, Coimbatore, Pune). Express Delivery guarantees delivery within 24 to 48 hours. Orders placed before 2:00 PM IST are staged and dispatched on the same business day from the optimal regional fulfillment center."
+  },
+  {
+    "document_id": "DOC-SHIPPING-01",
+    "document_name": "Shipping Policy.pdf",
+    "section": "2. Transit Delays & Fleet Escalation",
+    "page": 2,
+    "chunk_id": "SHIP-C02",
+    "content": "Shipping Delay Notifications: In the event of highway bottlenecks, warehouse inventory synchronization issues, or logistics delays extending beyond the Expected Delivery Date, the system automatically triggers a 'Delivery Delayed' status alert on the customer's tracking screen. Customers are provided automated tracking updates and direct access to priority support desk."
+  },
+  {
     "document_id": "DOC-REFUND-01",
     "document_name": "Refund Policy.pdf",
     "section": "1. General Refund Eligibility & Timelines",
@@ -29,7 +61,15 @@
     "section": "4. Non-Refundable and Final Sale Categories",
     "page": 4,
     "chunk_id": "REFUND-C04",
-    "content": "The following categories are non-returnable and non-refundable unless received in a damaged or DOA (dead on arrival) condition: Personal hygiene products, customized apparel, perishable groceries, digital software keys, and hazardous items marked 'Final Sale'. Fitness bands and electronic wearables (such as AeroPulse P-204) are fully eligible for return or refund within 14 days if found defective."
+    "content": "The following categories are non-returnable and non-refundable unless received in a damaged or DOA (dead on arrival) condition: Personal hygiene products, customized apparel, perishable groceries, digital software keys, and hazardous items marked 'Final Sale'. Fitness bands, office computing, and electronic peripherals (such as Wireless Keyboard P-204) are fully eligible for return or refund within 10 to 14 days if defective or unopened."
+  },
+  {
+    "document_id": "DOC-INV-01",
+    "document_name": "Inventory Management Guide.pdf",
+    "section": "2.1 Safety Stock & Cross-Warehouse Rebalancing",
+    "page": 4,
+    "chunk_id": "INV-C01",
+    "content": "Inventory Management & Multi-Echelon Rebalancing: Every SKU maintains a dynamic safety threshold calculated from 30-day velocity. When local warehouse stock drops below the reorder point, the inventory engine initiates automated replenishment. If an unexpected spike or edge sync failure depletes available stock at a regional facility (e.g., W03 Coimbatore), cross-docking from mother distribution centers (e.g., W02 Bengaluru) must be authorized to maintain order fulfillment commitments."
   },
   {
     "document_id": "DOC-WH-SOP-01",

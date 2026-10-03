@@ -22,6 +22,11 @@ export const AppLayout: React.FC = () => {
     { label: 'Dashboard', path: '/', icon: LayoutDashboard },
     { label: 'AI Command Center', path: '/ai', icon: Bot, highlight: true },
     { label: 'Demo Scenarios', path: '/scenarios', icon: PlayCircle, badge: 'Scenarios' },
+    { divider: true, section: 'Client & Incident Management' },
+    { label: 'Client Portal', path: '/client', icon: Truck, badge: 'Client' },
+    { label: 'Complaints Desk', path: '/complaints', icon: AlertOctagon, badge: 'Live Alerts' },
+    { label: 'Org Hierarchy & Chart', path: '/organization', icon: GitFork, badge: 'Structure' },
+    { label: 'My Grievances', path: '/my-grievances', icon: ShieldCheck, badge: 'Confidential' },
     { divider: true, section: 'Fulfillment & Inventory' },
     { label: 'Orders', path: '/orders', icon: ShoppingCart },
     { label: 'Inventory', path: '/inventory', icon: Layers },
@@ -46,11 +51,15 @@ export const AppLayout: React.FC = () => {
 
   const availableRoles: UserRole[] = [
     'Admin',
+    'Overall Manager',
+    'Department Manager',
+    'HR',
+    'Team Lead',
+    'Employee',
+    'Client',
     'Operations Manager',
     'Warehouse Manager',
-    'Support Agent',
-    'Analyst',
-    'Viewer'
+    'Support Agent'
   ];
 
   return (

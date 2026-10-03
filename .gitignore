@@ -16,6 +16,7 @@ env/
 dist/
 build/
 .cache/
+.idea/
 
 # Databases & runtime state
 data/pgdata/

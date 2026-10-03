@@ -76,6 +76,42 @@ export const AdminUsers: React.FC = () => {
       color: 'bg-purple-950/80 text-purple-300 border-purple-800'
     },
     {
+      role: 'Overall Manager',
+      label: 'Overall General Manager',
+      desc: 'Executive operational leadership, cross-department oversight, org chart authority.',
+      color: 'bg-indigo-950/80 text-indigo-300 border-indigo-800'
+    },
+    {
+      role: 'Department Manager',
+      label: 'Department Manager',
+      desc: 'Functional department lead, supervises Team Leads and HR, handles ticket escalations.',
+      color: 'bg-brand-950/80 text-brand-300 border-brand-800'
+    },
+    {
+      role: 'HR',
+      label: 'HR Officer',
+      desc: 'Human resources officer, employee grievances, workplace compliance and welfare.',
+      color: 'bg-purple-950/80 text-purple-300 border-purple-800'
+    },
+    {
+      role: 'Team Lead',
+      label: 'Team Lead',
+      desc: 'Operational squad supervisor, manages team employees, first responder to department alerts.',
+      color: 'bg-amber-950/80 text-amber-300 border-amber-800'
+    },
+    {
+      role: 'Employee',
+      label: 'Employee / Operator',
+      desc: 'Operations specialist or dispatcher. Submits internal grievances scoped strictly to TL & Mgr.',
+      color: 'bg-teal-950/80 text-teal-300 border-teal-800'
+    },
+    {
+      role: 'Client',
+      label: 'Commercial Client',
+      desc: 'External procurement partner / buyer. Tracks orders, views company profile, files client tickets.',
+      color: 'bg-cyan-950/80 text-cyan-300 border-cyan-800'
+    },
+    {
       role: 'Operations Manager',
       label: 'Operations Manager',
       desc: 'Order lifecycle management, cross-warehouse inventory transfers, incident mitigation.',
@@ -92,18 +128,6 @@ export const AdminUsers: React.FC = () => {
       label: 'Support Lead / Agent',
       desc: 'Customer CRM access, support ticket resolutions, customer refund authorizations.',
       color: 'bg-cyan-950/80 text-cyan-300 border-cyan-800'
-    },
-    {
-      role: 'Analyst',
-      label: 'Operations Analyst',
-      desc: 'Full read visibility, AI operational RCA queries, analytics & business intelligence.',
-      color: 'bg-blue-950/80 text-blue-300 border-blue-800'
-    },
-    {
-      role: 'Viewer',
-      label: 'Auditor / Viewer',
-      desc: 'Strict read-only access for compliance and financial auditing; write actions blocked.',
-      color: 'bg-slate-900 text-slate-400 border-slate-700'
     }
   ];
 

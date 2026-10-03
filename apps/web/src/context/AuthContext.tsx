@@ -3,6 +3,12 @@ import api from '../api/client';
 
 export type UserRole =
   | 'Admin'
+  | 'Overall Manager'
+  | 'Department Manager'
+  | 'HR'
+  | 'Team Lead'
+  | 'Employee'
+  | 'Client'
   | 'Operations Manager'
   | 'Warehouse Manager'
   | 'Support Agent'
@@ -14,6 +20,13 @@ export interface User {
   email: string;
   fullName: string;
   role: UserRole;
+  departmentId?: string | null;
+  departmentName?: string | null;
+  managerId?: string | null;
+  teamLeadId?: string | null;
+  clientId?: string | null;
+  companyName?: string | null;
+  phone?: string | null;
   permissions: string[];
 }
 
@@ -22,6 +35,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   login: (email: string, password?: string) => Promise<void>;
+  registerClient: (data: { email: string; password: string; fullName: string; companyName: string; phone?: string }) => Promise<void>;
   switchRole: (role: UserRole) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
@@ -65,6 +79,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(res.data.user);
   };
 
+  const registerClient = async (data: { email: string; password: string; fullName: string; companyName: string; phone?: string }) => {
+    const res = await api.post('/auth/client-register', data);
+    localStorage.setItem('shopsphere_token', res.data.token);
+    setToken(res.data.token);
+    setUser(res.data.user);
+  };
+
   const switchRole = async (role: UserRole) => {
     try {
       const res = await api.post('/auth/switch-role', { role });
@@ -89,6 +110,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         token,
         isAuthenticated: !!user,
         login,
+        registerClient,
         switchRole,
         logout,
         isLoading
